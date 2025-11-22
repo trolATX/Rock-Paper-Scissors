@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+
+      body {
+        font-family: Arial;
+        background-color: rgb(25, 25, 25);
+      }
+
+      .textMain {
+        font-size: 30px;
+        font-weight: bold;
+        color: white;
+      }
+      
+      .subTitle {
+        font-size: 25px;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 25px;
+      }
+      
+      .othersText {
+        font-size: 17px;
+        color: white;
+      }
+
+      .playerText {
+        font-size: 50px;
+        font-weight: bold;
+        color: white;
+      }
+
+      .computerText {
+        font-size: 50px;
+        font-weight: bold;
+        color: white;
+      }
+      
+      .underScore {
+        margin-top: 40px;
+        font-size: 15px;
+        color: white;
+      }
+
+      .buttonRPS {
+        margin-bottom: 25px;
+        margin-right: 10px;
+        background-color: transparent;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 3px solid white;
+        font-size: 50px;
+        cursor: pointer;
+        gap: 10;
+      }
+
+      .resetButton {
+        border: none;
+        width: 100px;
+        height: 30px;
+        font: 15px bold;
+        background-color: white;
+        cursor: pointer;
+        gap: 10;
+      }
+
+    </style>
+
+    <title>Paper Rock Scissors</title>
+  </head>
+
+  <body>
+
+    <p class="textMain">
+      Rock Paper Scissors <br>
+    </p>
+    
+    <p2>
+      <button class='buttonRPS' onclick="winnerPRS(1)">✊</button>
+      <button class='buttonRPS' onclick="winnerPRS(2)">✋</button>
+      <button class='buttonRPS' onclick="winnerPRS(3)">✌️</button>
+    </p2>
+    
+    <p class='subTitle' id="result">.</p>
+    <p class="othersText">You <span id="playerPlay" class="playerText"></span> <span id='computerPlay' class="computerText"></span> Computer</p>
+    <p id="underscore" class="underScore"></p>
+
+    <p>
+      <button class='resetButton' onclick="resetPRS()">Reset Stats</button>
+    </p>
+
+    <script>
+      let playerWins = 0;
+      let playerLosses = 0;
+      let playerTies = 0;
+
+      // ------------ CARREGAR DADOS DO ARQUIVO (localStorage) ------------
+      const saveName = "06-R-P-S-armazem.json";
+      const storedData = JSON.parse(localStorage.getItem(saveName));
+
+      if (storedData) {
+        playerWins = storedData.wins;
+        playerLosses = storedData.losses;
+        playerTies = storedData.ties;
+
+        document.getElementById('underscore').textContent =
+          `Wins: ${playerWins}, Losses: ${playerLosses}, Ties: ${playerTies}`;
+      }
+      // -------------------------------------------------------------------
+
+      function randomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function winnerPRS(playerInput) {
+        const randomNum = randomInt(1, 3);
+        let computer = '';
+        let player = '';
+        let winner = '';
+        let result = '';
+        let underscore = '';
+
+        if (randomNum === 1) {
+          computer = '✊';
+        } else if (randomNum === 2) {
+          computer = '✋';
+        } else if (randomNum === 3) {
+          computer = '✌️';
+        }
+
+        if (playerInput === 1) {
+          player = '✊';
+        } else if (playerInput === 2) {
+          player = '✋';
+        } else if (playerInput === 3) {
+          player = '✌️';
+        }
+
+        if (player === '✊' && computer === '✌️') {
+          winner == 'player';
+        } else if (player === '✊' && computer === '✋') {
+          winner = 'computer';
+        } else if (player === '✊' && computer === '✊') {
+          winner = 'ties';
+        }
+
+        if (player === '✋' && computer === '✌️') {
+          winner == 'computer';
+        } else if (player === '✋' && computer === '✋') {
+          winner = 'ties';
+        } else if (player === '✋' && computer === '✊') {
+          winner = 'player';
+        }
+
+        if (player === '✌️' && computer === '✌️') {
+          winner == 'ties';
+        } else if (player === '✌️' && computer === '✋') {
+          winner = 'player';
+        } else if (player === '✌️' && computer === '✊') {
+          winner = 'computer';
+        }
+
+        if (computer === '✊' && player === '✌️') {
+          winner == 'computer';
+        } else if (computer === '✊' && player === '✋') {
+          winner = 'player';
+        } else if (computer === '✊' && player === '✊') {
+          winner = 'ties';
+        }
+
+        if (computer === '✋' && player === '✌️') {
+          winner == 'player';
+        } else if (computer === '✋' && player === '✋') {
+          winner = 'ties';
+        } else if (computer === '✋' && player === '✊') {
+          winner = 'computer';
+        }
+
+        if (computer === '✌️' && player === '✌️') {
+          winner == 'ties';
+        } else if (computer === '✌️' && player === '✋') {
+          winner = 'computer';
+        } else if (computer === '✌️' && player === '✊') {
+          winner = 'player';
+        }
+
+        if (winner === 'player') {
+          playerWins += 1;
+          result = 'You win.';
+        } else if (winner === 'computer') {
+          playerLosses += 1;
+          result = 'You lose.';
+        } else {
+          playerTies += 1;
+          result = 'Tie.';
+        }
+
+        underscore = `Wins: ${playerWins}, Losses: ${playerLosses}, Ties: ${playerTies}`;
+        document.getElementById('result').textContent = result;
+        document.getElementById('playerPlay').textContent = player;
+        document.getElementById('computerPlay').textContent = computer;
+        document.getElementById('underscore').textContent = underscore;
+
+        // ------------ SALVAR EM 06-R-P-S-armazem.json (localStorage) ------------
+        const dataToSave = {
+          wins: playerWins,
+          losses: playerLosses,
+          ties: playerTies
+        };
+        localStorage.setItem(saveName, JSON.stringify(dataToSave));
+        // --------------------------------------------------------------------
+      }
+
+      // ----------- FUNÇÃO RESET COMPLETA E CORRETA -----------
+      function resetPRS() {
+        playerWins = 0;
+        playerLosses = 0;
+        playerTies = 0;
+
+        const dataToSave = {
+          wins: 0,
+          losses: 0,
+          ties: 0
+        };
+
+        localStorage.setItem(saveName, JSON.stringify(dataToSave));
+
+        document.getElementById('underscore').textContent =
+          `Wins: 0, Losses: 0, Ties: 0`;
+
+        document.getElementById('result').textContent = '.';
+        document.getElementById('playerPlay').textContent = '';
+        document.getElementById('computerPlay').textContent = '';
+      }
+      // --------------------------------------------------------
+
+    </script>
+
+</body>
+</html>
